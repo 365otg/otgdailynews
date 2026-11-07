@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Morning Brief / Nightly News — OTG Daily News</title>
+<meta name="description" content="Morning Brief: the city at dawn. Nightly News: the day when it is done. From OTG Daily News.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<header class="masthead">
+<div class="wrap">
+<p class="date-line" id="today"></p>
+<h1><span class="otg">OTG</span> <span class="daily">Daily</span> <span class="news">News</span></h1>
+<hr class="gold-rule">
+<p class="watermark">Over Time Grind &bull; @SupplyTheWork &bull; @ParisEighty</p>
+</div>
+</header>
+<nav class="main-nav" aria-label="Sections">
+<div class="wrap"><ul>
+<li><a href="index.html">Top Stories</a></li>
+<li><a href="research.html">Research Report</a></li>
+<li><a href="music.html">OTG Music</a></li>
+<li><a href="brief.html" aria-current="page">Morning Brief / Nightly News</a></li>
+<li><a href="gear.html">Gear</a></li>
+<li><a href="get-covered.html">Get Covered</a></li>
+</ul></div>
+</nav>
+<main>
+<section class="section lane-morning" aria-labelledby="morning-heading">
+<div class="wrap">
+<p class="kicker">Morning Brief</p>
+<h2 id="morning-heading">Morning Brief</h2>
+<p class="lede">The city at dawn. The top-5 news highlights you need to start your day, published bright and early &mdash; five stories, no filler.</p>
+<div class="two-col">
+<div class="panel"><h3>How It Works</h3><p>Every morning, five stories: the overnight news, the day ahead, and the one thing everyone will be talking about by lunch.</p></div>
+<div class="panel"><h3>Start Here</h3><p>The latest stories from the blog are below. Each one links to its blog post, where comments live.</p></div>
+</div>
+<p id="feed-status" class="note" style="margin-top:26px">Loading the latest stories&hellip;</p>
+<div class="cards" id="top-stories"></div>
+</div>
+</section>
+<section class="section lane-nightly" aria-labelledby="nightly-heading">
+<div class="wrap">
+<p class="kicker">Nightly News</p>
+<h2 id="nightly-heading">Nightly News</h2>
+<p class="lede">The day when it is done. The evening round-up, the Defensa, and the look ahead to tomorrow &mdash; the record of what actually happened today.</p>
+<ul class="latest-list" id="latest-list"></ul>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="wrap">
+<p>Over Time Grind &bull; @SupplyTheWork &bull; @ParisEighty</p>
+<p><a href="index.html">&larr; Back to Top Stories</a></p>
+</div>
+</footer>
+</body>
+</html>
