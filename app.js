@@ -1,4 +1,4 @@
-// OTG Daily News — front page data layer.
+// OTG Daily News — front page data layer + PWA app shell logic.
 // FEED_URL is the single configurable constant for the story feed.
 // It points at the Supply The Work Blogger feed for now; when the new
 // OTG Daily News blog (otgdailynews.blogspot.com) is live, swap this
@@ -18,9 +18,8 @@ function postDate(entry) {
   var raw = (entry.published && entry.published.$t) || '';
   return new Date(raw);
 }
-function relativeTime(entry) {
-  var d = postDate(entry);
-  if (isNaN(d)) return '';
+function relTimeFromDate(d) {
+  if (!d || isNaN(d)) return '';
   var mins = Math.floor((Date.now() - d.getTime()) / 60000);
   if (mins < 1) return 'just now';
   if (mins < 60) return mins + 'm ago';
@@ -29,6 +28,9 @@ function relativeTime(entry) {
   var days = Math.floor(hours / 24);
   if (days < 7) return days + 'd ago';
   return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+}
+function relativeTime(entry) {
+  return relTimeFromDate(postDate(entry));
 }
 function postLabels(entry) {
   return (entry.category || []).map(function (c) { return c.term; }).filter(Boolean);
@@ -72,6 +74,15 @@ function sourceLine(entry) {
 function headlineHtml(entry) {
   return '<a href="' + escapeHtml(postLink(entry)) + '">' + escapeHtml(entry.title.$t) + '</a>';
 }
+function entryIndex(entry) {
+  return ALL_ENTRIES.indexOf(entry);
+}
+function previewSaveButtons(entry) {
+  var i = entryIndex(entry);
+  var saved = isSaved(postLink(entry));
+  return '<p><button type="button" class="save-btn' + (saved ? ' saved' : '') + '" data-save="' + i + '">' + (saved ? 'Saved' : 'Save') + '</button> ' +
+    '<button type="button" class="save-btn" data-preview="' + i + '">Preview</button></p>';
+}
 
 // Section blocks: each nav section filters the feed by the post's labels.
 var SECTIONS = [
@@ -111,7 +122,7 @@ function renderFrontPage(entries) {
     leadEl.innerHTML = thumbHtml(lead, 'lead') +
       '<h2 class="headline">' + headlineHtml(lead) + '</h2>' +
       '<p class="dek">' + escapeHtml(postSummary(lead, 220)) + '</p>' +
-      sourceLine(lead);
+      sourceLine(lead) + previewSaveButtons(lead);
   }
   if (railEl) {
     railEl.innerHTML = '';
@@ -119,7 +130,7 @@ function renderFrontPage(entries) {
       var item = document.createElement('article');
       item.className = 'rail-story';
       item.innerHTML = thumbHtml(entry, 'rail') +
-        '<div><h3 class="headline">' + headlineHtml(entry) + '</h3>' + sourceLine(entry) + '</div>';
+        '<div><h3 class="headline">' + headlineHtml(entry) + '</h3>' + sourceLine(entry) + previewSaveButtons(entry) + '</div>';
       railEl.appendChild(item);
     });
   }
@@ -141,10 +152,11 @@ function renderFrontPage(entries) {
       card.innerHTML = thumbHtml(entry, 'card') +
         '<div class="card-body"><h3 class="headline">' + headlineHtml(entry) + '</h3>' +
         '<p class="dek">' + escapeHtml(postSummary(entry, 140)) + '</p>' +
-        sourceLine(entry) + '</div>';
+        sourceLine(entry) + previewSaveButtons(entry) + '</div>';
       grid.appendChild(card);
     });
   });
+  renderHeadlines(entries);
 }
 
 // Legacy containers used by the section pages (Research, Music, Brief).
@@ -243,6 +255,145 @@ async function loadStories() {
     if (statusEl) statusEl.textContent = 'Stories load from the OTG Daily News blog. If nothing appears here, read the latest posts on the blog directly.';
   }
 }
+
+// ---- App views: For You / Headlines / Topics / Saved (bottom tab bar) ----
+function switchView(name) {
+  var views = ['for-you', 'headlines', 'topics', 'saved'];
+  views.forEach(function (v) {
+    var el = document.getElementById('view-' + v);
+    if (el) el.hidden = (v !== name);
+  });
+  document.querySelectorAll('.app-tabs button').forEach(function (b) {
+    if (b.getAttribute('data-view') === name) b.setAttribute('aria-current', 'page');
+    else b.removeAttribute('aria-current');
+  });
+  if (name === 'saved') renderSaved();
+  if (name === 'headlines') renderHeadlines(ALL_ENTRIES);
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+function renderHeadlines(entries) {
+  var list = document.getElementById('headline-list');
+  if (!list) return;
+  list.innerHTML = '';
+  entries.slice(0, 20).forEach(function (entry) {
+    var li = document.createElement('li');
+    li.innerHTML = '<h3 class="headline">' + headlineHtml(entry) + '</h3>' + sourceLine(entry) + previewSaveButtons(entry);
+    list.appendChild(li);
+  });
+  if (!entries.length) list.innerHTML = '<li>Headlines are loading&hellip;</li>';
+}
+
+// ---- Article view: in-app preview that hands off to the blog post ----
+function openArticle(entry) {
+  var view = document.getElementById('article-view');
+  var content = document.getElementById('article-content');
+  if (!view || !content || !entry) return;
+  content.innerHTML = thumbHtml(entry, 'lead') +
+    '<h2 id="article-title">' + escapeHtml(entry.title.$t) + '</h2>' +
+    sourceLine(entry) +
+    '<p style="font-size:18px">' + escapeHtml(postSummary(entry, 400)) + '</p>' +
+    '<p class="note">This is a preview. The full story — and the comments — live on the OTG Daily News blog.</p>' +
+    '<p><a class="read-full" href="' + escapeHtml(postLink(entry)) + '" target="_blank" rel="noopener">Read the full story on the blog &rarr;</a></p>' +
+    previewSaveButtons(entry);
+  view.hidden = false;
+  document.body.style.overflow = 'hidden';
+}
+function closeArticle() {
+  var view = document.getElementById('article-view');
+  if (view) view.hidden = true;
+  document.body.style.overflow = '';
+}
+
+// ---- Saved stories (localStorage) ----
+function getSaved() {
+  try { return JSON.parse(localStorage.getItem('otg-saved') || '[]'); } catch (e) { return []; }
+}
+function isSaved(link) {
+  return getSaved().some(function (s) { return s.link === link; });
+}
+function toggleSave(entry) {
+  var saved = getSaved();
+  var link = postLink(entry);
+  var i = saved.findIndex(function (s) { return s.link === link; });
+  if (i === -1) saved.push({ title: entry.title.$t, link: link, time: (entry.published && entry.published.$t) || '' });
+  else saved.splice(i, 1);
+  try { localStorage.setItem('otg-saved', JSON.stringify(saved)); } catch (e) {}
+  renderFrontPage(ALL_ENTRIES);
+  renderSaved();
+}
+function renderSaved() {
+  var list = document.getElementById('saved-list');
+  if (!list) return;
+  var saved = getSaved();
+  if (!saved.length) {
+    list.innerHTML = '<li>No saved stories yet. Tap Save on any story to keep it here.</li>';
+    return;
+  }
+  list.innerHTML = saved.map(function (s) {
+    var d = new Date(s.time);
+    return '<li><h3 class="headline"><a href="' + escapeHtml(s.link) + '" target="_blank" rel="noopener">' + escapeHtml(s.title) + '</a></h3>' +
+      '<p class="source">OTG Daily News <span class="dot">&bull;</span> ' + escapeHtml(relTimeFromDate(d)) + '</p></li>';
+  }).join('');
+}
+
+// ---- Around the Culture: aggregation from other outlets ----
+// Outlet name + headline + time only. Headlines link OUT to the outlet's
+// own site. No other outlet's text, photos or logos are used here.
+function loadAggregation() {
+  var section = document.getElementById('around-culture');
+  var list = document.getElementById('agg-list');
+  if (!section || !list) return;
+  fetch('sources.json').then(function (r) { return r.json(); }).then(function (cfg) {
+    var jobs = (cfg.outlets || []).map(function (o) {
+      var url = cfg.proxy + encodeURIComponent(o.rss) + '&count=' + (cfg.per_outlet || 3);
+      return fetch(url).then(function (r) { return r.json(); }).then(function (d) {
+        if (!d || d.status !== 'ok' || !d.items) return [];
+        return d.items.slice(0, cfg.per_outlet || 3).map(function (it) {
+          return { outlet: o.name, title: it.title, link: it.link, date: new Date(it.pubDate) };
+        });
+      }).catch(function () { return []; });
+    });
+    return Promise.all(jobs);
+  }).then(function (groups) {
+    var items = [];
+    groups.forEach(function (g) { items = items.concat(g); });
+    items.sort(function (a, b) { return b.date - a.date; });
+    items = items.slice(0, 12);
+    if (!items.length) { section.hidden = true; return; }
+    list.innerHTML = items.map(function (it) {
+      return '<div class="agg-item"><span class="agg-outlet">' + escapeHtml(it.outlet) + '</span>' +
+        '<a href="' + escapeHtml(it.link) + '" target="_blank" rel="noopener">' + escapeHtml(it.title) + '</a>' +
+        '<span class="source">' + escapeHtml(relTimeFromDate(it.date)) + '</span></div>';
+    }).join('');
+  }).catch(function () { section.hidden = true; });
+}
+
+function wireApp() {
+  document.addEventListener('click', function (ev) {
+    var t = ev.target;
+    var preview = t.closest ? t.closest('[data-preview]') : null;
+    if (preview) { var pe = ALL_ENTRIES[parseInt(preview.getAttribute('data-preview'), 10)]; if (pe) openArticle(pe); return; }
+    var save = t.closest ? t.closest('[data-save]') : null;
+    if (save) { var se = ALL_ENTRIES[parseInt(save.getAttribute('data-save'), 10)]; if (se) toggleSave(se); return; }
+    var tab = t.closest ? t.closest('.app-tabs button[data-view]') : null;
+    if (tab) { switchView(tab.getAttribute('data-view')); return; }
+    var chip = t.closest ? t.closest('[data-topic]') : null;
+    if (chip) {
+      var target = chip.getAttribute('data-topic');
+      if (target === 'research.html') { window.location.href = 'research.html'; return; }
+      switchView('for-you');
+      var el = document.getElementById(target);
+      if (el) setTimeout(function () { el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 60);
+      return;
+    }
+    if (t.id === 'article-close' || t.id === 'article-view') closeArticle();
+  });
+  document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') closeArticle(); });
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  }
+}
+
 (function () {
   var today = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' });
   var el = document.getElementById('today');
@@ -250,4 +401,4 @@ async function loadStories() {
   var briefDate = document.getElementById('brief-date');
   if (briefDate) briefDate.textContent = today;
 })();
-document.addEventListener('DOMContentLoaded', function () { wireSearch(); loadStories(); });
+document.addEventListener('DOMContentLoaded', function () { wireSearch(); wireApp(); loadStories(); loadAggregation(); });
