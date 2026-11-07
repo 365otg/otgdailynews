@@ -167,3 +167,4 @@ footer.site-footer a:hover{color:var(--gold)}
 @media (max-width:900px){.top-stories{grid-template-columns:1fr}.rail{border-left:0;padding-left:0}.card-grid{grid-template-columns:repeat(2,1fr)}.tab-nav{top:0}}
 @media (max-width:600px){.topbar-inner{flex-direction:column;align-items:stretch;gap:10px}.search-box{max-width:none}.top-links{margin-left:0;justify-content:center;flex-wrap:wrap}.wordmark{text-align:center}.card-grid{grid-template-columns:1fr}.rail-story .thumb-wrap{flex-basis:96px}}
 .status:empty{display:none}
+.note:empty{display:none}
