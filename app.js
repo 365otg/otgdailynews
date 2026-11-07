@@ -329,6 +329,13 @@ function toggleSave(entry) {
   try { localStorage.setItem('otg-saved', JSON.stringify(saved)); } catch (e) {}
   renderFrontPage(ALL_ENTRIES);
   renderSaved();
+  // Keep the open article overlay's Save button in sync with the new state.
+  var dlgBtn = document.querySelector('#article-view [data-save]');
+  if (dlgBtn) {
+    var nowSaved = isSaved(link);
+    dlgBtn.textContent = nowSaved ? 'Saved' : 'Save';
+    dlgBtn.classList.toggle('saved', nowSaved);
+  }
 }
 function renderSaved() {
   var list = document.getElementById('saved-list');
