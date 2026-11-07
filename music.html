@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OTG Music — OTG Daily News</title>
+<meta name="description" content="OTG Music: new music, new artists, and a new slot every week from Over Time Grind.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<header class="masthead">
+<div class="wrap">
+<p class="date-line" id="today"></p>
+<h1><span class="otg">OTG</span> <span class="daily">Daily</span> <span class="news">News</span></h1>
+<hr class="gold-rule">
+<p class="watermark">Over Time Grind &bull; @SupplyTheWork &bull; @ParisEighty</p>
+</div>
+</header>
+<nav class="main-nav" aria-label="Sections">
+<div class="wrap"><ul>
+<li><a href="index.html">Top Stories</a></li>
+<li><a href="research.html">Research Report</a></li>
+<li><a href="music.html" aria-current="page">OTG Music</a></li>
+<li><a href="brief.html">Morning Brief / Nightly News</a></li>
+<li><a href="gear.html">Gear</a></li>
+<li><a href="get-covered.html">Get Covered</a></li>
+</ul></div>
+</nav>
+<main>
+<section class="section lane-music" aria-labelledby="music-heading">
+<div class="wrap">
+<p class="kicker">OTG Music</p>
+<h2 id="music-heading">OTG Music</h2>
+<p class="lede">The soundtrack of the grind. New music, new artists, and a new slot every week &mdash; the record that is on repeat at OTG, and the artists you should be watching.</p>
+<div class="two-col">
+<div class="panel"><h3>New This Week</h3><p>One new slot every week. The latest music stories from the blog are below &mdash; each one links to its blog post, where comments live.</p></div>
+<div class="panel"><h3>On Repeat</h3><p>The OTG playlist in progress: the songs and albums the team keeps coming back to while the news is being made.</p></div>
+</div>
+<h2 style="margin-top:44px">Latest From The Blog</h2>
+<p id="feed-status" class="note">Loading the latest stories&hellip;</p>
+<div class="cards" id="top-stories"></div>
+<ul class="latest-list" id="latest-list"></ul>
+</div>
+</section>
+</main>
+<footer class="site-footer">
+<div class="wrap">
+<p>Over Time Grind &bull; @SupplyTheWork &bull; @ParisEighty</p>
+<p><a href="index.html">&larr; Back to Top Stories</a></p>
+</div>
+</footer>
+</body>
+</html>
