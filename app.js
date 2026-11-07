@@ -36,8 +36,10 @@ function postLabels(entry) {
   return (entry.category || []).map(function (c) { return c.term; }).filter(Boolean);
 }
 function postSummary(entry, max) {
-  var s = (entry.summary && entry.summary.$t) || '';
-  var clean = s.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  // The JSON feed carries no summary field, so build the dek from the post
+  // body instead: strip the HTML to plain text and take the opening words.
+  var s = (entry.summary && entry.summary.$t) || (entry.content && entry.content.$t) || '';
+  var clean = s.replace(/<[^>]*>/g, ' ').replace(/&nbsp;|&amp;/g, function (m) { return m === '&amp;' ? '&' : ' '; }).replace(/\s+/g, ' ').trim();
   var limit = max || 180;
   return clean.length > limit ? clean.slice(0, limit).replace(/\s\S*$/, '') + '…' : clean;
 }
@@ -82,6 +84,11 @@ function previewSaveButtons(entry) {
   var saved = isSaved(postLink(entry));
   return '<p><button type="button" class="save-btn' + (saved ? ' saved' : '') + '" data-save="' + i + '">' + (saved ? 'Saved' : 'Save') + '</button> ' +
     '<button type="button" class="save-btn" data-preview="' + i + '">Preview</button></p>';
+}
+function saveButtonHtml(entry) {
+  var i = entryIndex(entry);
+  var saved = isSaved(postLink(entry));
+  return '<p><button type="button" class="save-btn' + (saved ? ' saved' : '') + '" data-save="' + i + '">' + (saved ? 'Saved' : 'Save') + '</button></p>';
 }
 
 // Section blocks: each nav section filters the feed by the post's labels.
@@ -296,7 +303,7 @@ function openArticle(entry) {
     '<p style="font-size:18px">' + escapeHtml(postSummary(entry, 400)) + '</p>' +
     '<p class="note">This is a preview. The full story — and the comments — live on the OTG Daily News blog.</p>' +
     '<p><a class="read-full" href="' + escapeHtml(postLink(entry)) + '" target="_blank" rel="noopener">Read the full story on the blog &rarr;</a></p>' +
-    previewSaveButtons(entry);
+    saveButtonHtml(entry);
   view.hidden = false;
   document.body.style.overflow = 'hidden';
 }
