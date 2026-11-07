@@ -5,32 +5,51 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>OTG Music — OTG Daily News</title>
 <meta name="description" content="OTG Music: new music, new artists, and a new slot every week from Over Time Grind.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#C8102E">
+<link rel="apple-touch-icon" href="icon.svg">
+<meta name="mobile-web-app-capable" content="yes">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
-<script src="app.js" defer></script>
+<link rel="stylesheet" href="styles.css?v=4">
+<script src="app.js?v=6" defer></script>
 </head>
 <body>
-<header class="masthead">
-<div class="wrap">
-<p class="date-line"><strong style="color:var(--gold)">EST. 2010</strong> &bull; <span id="today"></span></p>
-<h1><span class="otg">OTG</span> <span class="daily">Daily</span> <span class="news">News</span></h1>
-<hr class="gold-rule">
-<p class="watermark">Over Time Grind &bull; @SupplyTheWork &bull; @ParisEighty</p>
+<header class="topbar">
+<div class="wrap topbar-inner">
+<a class="brand" href="index.html">OTG Daily News <span class="est">EST. 2010</span></a>
+<form class="search" id="site-search" role="search">
+<label class="sr-only" for="search-input">Search OTG Daily News</label>
+<input id="search-input" name="q" type="search" placeholder="Search OTG Daily News">
+<button type="submit">Search</button>
+</form>
+<nav class="top-links" aria-label="Follow and subscribe">
+<a class="subscribe" href="https://www.supplythework.xyz/" target="_blank" rel="noopener">Subscribe</a>
+<span class="handle">@SupplyTheWork</span>
+<span class="handle">@ParisEighty</span>
+<a href="gear.html">Gear</a>
+<a href="get-covered.html">Get Covered</a>
+</nav>
 </div>
 </header>
-<nav class="main-nav" aria-label="Sections">
-<div class="wrap"><ul>
-<li><a href="index.html">Top Stories</a></li>
-<li><a href="research.html">Research Report</a></li>
-<li><a href="music.html" aria-current="page">OTG Music</a></li>
-<li><a href="brief.html">Morning Brief / Nightly News</a></li>
-<li><a href="gear.html">Gear</a></li>
-<li><a href="get-covered.html">Get Covered</a></li>
-</ul></div>
+<nav class="tab-nav wrap" aria-label="Sections">
+<a class="tab" href="index.html">Home</a>
+<a class="tab" href="index.html#top-stories">Top Stories</a>
+<a class="tab" href="index.html#section-hip-hop-history">Today in Hip Hop History</a>
+<a class="tab" href="research.html">OTG Research Report</a>
+<a class="tab" href="index.html#section-hip-hop-news">Hip Hop News</a>
+<a class="tab" href="index.html#section-court-legal">Court &amp; Legal</a>
+<a class="tab" href="index.html#section-philly">Philly</a>
+<a class="tab" href="index.html#section-sports">Sports</a>
+<a class="tab" href="index.html#section-tech">Tech</a>
+<a class="tab" href="index.html#section-weird-news">Weird News</a>
+<a class="tab" href="music.html" aria-current="page">OTG Music</a>
+<a class="tab" href="brief.html">Morning Brief</a>
+<a class="tab" href="brief.html">Nightly News</a>
 </nav>
 <main>
+<div id="search-results" hidden></div>
 <section class="section lane-music" aria-labelledby="music-heading">
 <div class="wrap">
 <p class="kicker">OTG Music</p>
@@ -47,10 +66,18 @@
 </div>
 </section>
 </main>
+<nav class="app-tabs" aria-label="Sections">
+<button type="button" data-view="for-you" aria-current="page">For You</button>
+<button type="button" data-view="headlines">Headlines</button>
+<button type="button" data-view="topics">Topics</button>
+<button type="button" data-view="saved">Saved</button>
+</nav>
 <footer class="site-footer">
 <div class="wrap">
-<p>Over Time Grind &bull; @SupplyTheWork &bull; @ParisEighty</p>
+<p>Over Time Grind • @SupplyTheWork • @ParisEighty</p>
 <p>OTG Daily News &mdash; covering the culture since 2010. An Over Time Grind / Supply The Work publication.</p>
+<p>EST. 2010 &bull; Stories are published on the OTG Daily News blog &mdash; comments live there.</p>
+<p><a href="gear.html">Gear</a> &bull; <a href="get-covered.html">Get Covered</a> &bull; <a href="research.html">Research Report</a></p>
 <p><a href="index.html">&larr; Back to Top Stories</a></p>
 </div>
 </footer>
