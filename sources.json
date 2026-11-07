@@ -1,5 +1,5 @@
 {
-  "note": "Around the Culture — aggregation sources. Outlet name + headline + time only; headlines link out to the outlet's own site. OTG never republishes another outlet's text and never uses another outlet's images or logos.",
+  "note": "Around the Culture — aggregation sources. Outlet name + headline + time only; headlines link out to the outlet's own site. OTG never republishes another outlet's text and never uses another outlet's photos.",
   "proxy": "https://api.rss2json.com/v1/api.json?rss_url=",
   "per_outlet": 3,
   "outlets": [
@@ -21,6 +21,11 @@
     {
       "name": "Vibe",
       "rss": "https://www.vibe.com/feed/",
+      "verified": true
+    },
+    {
+      "name": "BBC News",
+      "rss": "http://feeds.bbci.co.uk/news/rss.xml",
       "verified": true
     }
   ]
