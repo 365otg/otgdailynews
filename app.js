@@ -250,7 +250,9 @@ async function loadStories() {
     if (!entries.length) throw new Error('No posts in feed');
     ALL_ENTRIES = entries;
     renderFrontPage(entries);
-    renderLegacy(entries);
+    // Legacy containers live only on the section pages; the front page
+    // has a lead story instead, so skip the legacy renderer there.
+    if (!document.getElementById('lead-story')) renderLegacy(entries);
   } catch (err) {
     if (statusEl) statusEl.textContent = 'Stories load from the OTG Daily News blog. If nothing appears here, read the latest posts on the blog directly.';
   }
@@ -339,33 +341,71 @@ function renderSaved() {
 // ---- Around the Culture: aggregation from other outlets ----
 // Outlet name + headline + time only. Headlines link OUT to the outlet's
 // own site. No other outlet's text, photos or logos are used here.
+function parseRssXml(text, outlet, max) {
+  try {
+    var doc = new DOMParser().parseFromString(text, 'text/xml');
+    var nodes = doc.querySelectorAll('item');
+    var out = [];
+    for (var i = 0; i < nodes.length && out.length < max; i++) {
+      var n = nodes[i];
+      var title = n.querySelector('title') ? n.querySelector('title').textContent : '';
+      var link = n.querySelector('link') ? n.querySelector('link').textContent : '';
+      var pub = n.querySelector('pubDate') ? n.querySelector('pubDate').textContent : '';
+      if (title && link) out.push({ outlet: outlet, title: title, link: link, date: new Date(pub) });
+    }
+    return out;
+  } catch (e) { return []; }
+}
+function showAggItems(items) {
+  var list = document.getElementById('agg-list');
+  if (!list) return;
+  if (!items.length) {
+    list.innerHTML = '<p class="agg-note">Around the Culture is updating — check back shortly.</p>';
+    return;
+  }
+  list.innerHTML = items.map(function (it) {
+    return '<div class="agg-item"><span class="agg-outlet">' + escapeHtml(it.outlet) + '</span>' +
+      '<a href="' + escapeHtml(it.link) + '" target="_blank" rel="noopener">' + escapeHtml(it.title) + '</a>' +
+      '<span class="source">' + escapeHtml(relTimeFromDate(it.date)) + '</span></div>';
+  }).join('');
+}
 function loadAggregation() {
   var section = document.getElementById('around-culture');
   var list = document.getElementById('agg-list');
   if (!section || !list) return;
   fetch('sources.json').then(function (r) { return r.json(); }).then(function (cfg) {
+    var per = cfg.per_outlet || 3;
     var jobs = (cfg.outlets || []).map(function (o) {
-      var url = cfg.proxy + encodeURIComponent(o.rss) + '&count=' + (cfg.per_outlet || 3);
+      var url = cfg.proxy + encodeURIComponent(o.rss) + '&count=' + per;
       return fetch(url).then(function (r) { return r.json(); }).then(function (d) {
         if (!d || d.status !== 'ok' || !d.items) return [];
-        return d.items.slice(0, cfg.per_outlet || 3).map(function (it) {
+        return d.items.slice(0, per).map(function (it) {
           return { outlet: o.name, title: it.title, link: it.link, date: new Date(it.pubDate) };
         });
       }).catch(function () { return []; });
     });
-    return Promise.all(jobs);
-  }).then(function (groups) {
-    var items = [];
-    groups.forEach(function (g) { items = items.concat(g); });
+    return Promise.all(jobs).then(function (groups) {
+      var items = [];
+      groups.forEach(function (g) { items = items.concat(g); });
+      if (items.length) return items;
+      var fallbackJobs = (cfg.outlets || []).map(function (o) {
+        return fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(o.rss))
+          .then(function (r) { return r.text(); })
+          .then(function (t) { return parseRssXml(t, o.name, per); })
+          .catch(function () { return []; });
+      });
+      return Promise.all(fallbackJobs).then(function (fgroups) {
+        var fitems = [];
+        fgroups.forEach(function (g) { fitems = fitems.concat(g); });
+        return fitems;
+      });
+    });
+  }).then(function (items) {
     items.sort(function (a, b) { return b.date - a.date; });
-    items = items.slice(0, 12);
-    if (!items.length) { section.hidden = true; return; }
-    list.innerHTML = items.map(function (it) {
-      return '<div class="agg-item"><span class="agg-outlet">' + escapeHtml(it.outlet) + '</span>' +
-        '<a href="' + escapeHtml(it.link) + '" target="_blank" rel="noopener">' + escapeHtml(it.title) + '</a>' +
-        '<span class="source">' + escapeHtml(relTimeFromDate(it.date)) + '</span></div>';
-    }).join('');
-  }).catch(function () { section.hidden = true; });
+    showAggItems(items.slice(0, 12));
+  }).catch(function () {
+    showAggItems([]);
+  });
 }
 
 function wireApp() {
