@@ -199,12 +199,41 @@ function wireSearch() {
   });
 }
 
+// Blogger's plain JSON feed does not allow cross-origin fetch from this
+// site, so if fetch fails we load the same feed as JSON-in-script
+// (a <script> tag, which is not blocked by CORS). Same FEED_URL, same posts.
+function loadViaJsonp() {
+  return new Promise(function (resolve, reject) {
+    var done = false;
+    var script = document.createElement('script');
+    var timer = setTimeout(function () { finish(new Error('Feed timed out')); }, 12000);
+    function finish(err, data) {
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      delete window.otgFeedReady;
+      if (script.parentNode) script.parentNode.removeChild(script);
+      if (err) reject(err); else resolve(data);
+    }
+    window.otgFeedReady = function (data) { finish(null, data); };
+    script.onerror = function () { finish(new Error('Feed script failed to load')); };
+    var url = FEED_URL.replace('alt=json', 'alt=json-in-script');
+    url += (url.indexOf('?') === -1 ? '?' : '&') + 'callback=otgFeedReady';
+    script.src = url;
+    document.head.appendChild(script);
+  });
+}
 async function loadStories() {
   var statusEl = document.getElementById('feed-status');
   try {
-    var res = await fetch(FEED_URL);
-    if (!res.ok) throw new Error('Feed returned ' + res.status);
-    var data = await res.json();
+    var data;
+    try {
+      var res = await fetch(FEED_URL);
+      if (!res.ok) throw new Error('Feed returned ' + res.status);
+      data = await res.json();
+    } catch (fetchErr) {
+      data = await loadViaJsonp();
+    }
     var entries = (data.feed && data.feed.entry) || [];
     if (!entries.length) throw new Error('No posts in feed');
     ALL_ENTRIES = entries;
