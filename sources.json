@@ -1,5 +1,5 @@
 {
-  "note": "Around the Culture — aggregation sources. Outlet name + headline + time only; headlines link out to the outlet's own site. OTG never republishes another outlet's text and never uses another outlet's photos or logos here. Feeds are pulled through the JSON proxy below because browsers cannot fetch RSS cross-origin. Outlets marked verified were confirmed working through the proxy on Nov 7, 2026; any feed that fails at runtime is skipped silently.",
+  "note": "Around the Culture — aggregation sources. Outlet name + headline + time only; headlines link out to the outlet's own site. OTG never republishes another outlet's text and never uses another outlet's images or logos.",
   "proxy": "https://api.rss2json.com/v1/api.json?rss_url=",
   "per_outlet": 3,
   "outlets": [
@@ -14,19 +14,14 @@
       "verified": true
     },
     {
-      "name": "AllHipHop",
-      "rss": "https://allhiphop.com/feed/",
-      "verified": false
-    },
-    {
       "name": "Billboard",
       "rss": "https://www.billboard.com/feed/",
-      "verified": false
+      "verified": true
     },
     {
       "name": "Vibe",
       "rss": "https://www.vibe.com/feed/",
-      "verified": false
+      "verified": true
     }
   ]
 }
