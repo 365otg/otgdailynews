@@ -5,11 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>OTG Daily News — Over Time Grind — EST. 2010</title>
 <meta name="description" content="OTG Daily News: top stories, hip hop news, court & legal, Philly, sports, tech, weird news, OTG Music, Morning Brief and Nightly News from Over Time Grind.">
+<meta name="theme-color" content="#C8102E">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="OTG News">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;700;800&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
-<script src="app.js" defer></script>
+<link rel="stylesheet" href="styles.css?v=3">
+<script src="app.js?v=3" defer></script>
 </head>
 <body>
 <header class="topbar">
@@ -48,6 +55,7 @@
 </ul>
 </nav>
 <main class="wrap">
+<div id="view-for-you" class="app-view">
 <p class="date-line" style="margin-top:16px"><strong style="color:var(--crimson)">OTG Daily News</strong> &bull; <span id="today"></span></p>
 <div class="search-results" id="search-results" hidden></div>
 <section aria-labelledby="top-heading" id="top-stories">
@@ -120,7 +128,52 @@
 <div class="panel"><h3>Get Covered</h3><p>Paid coverage for artists, brands and companies: release posts, launch weeks and company profiles, clearly labelled as sponsored.</p><p><a href="get-covered.html">See the rate card &rarr;</a></p></div>
 </div>
 </section>
+<section class="news-section" id="around-culture" aria-labelledby="agg-heading">
+<h2 id="agg-heading">Around the Culture</h2>
+<p class="lede">More coverage from around the culture &mdash; headlines from other outlets, in their words on their own sites.</p>
+<div class="agg-list" id="agg-list"></div>
+<p class="agg-note">Headlines are shown with the outlet&rsquo;s name and the time only, and every headline links out to read it on the outlet&rsquo;s own site. OTG does not republish other outlets&rsquo; stories, photos or logos.</p>
+</section>
+</div>
+<section id="view-headlines" class="app-view" hidden aria-labelledby="headlines-heading">
+<h2 id="headlines-heading" style="font-size:30px;margin:18px 0 0">Headlines</h2>
+<p class="lede">The latest from the OTG Daily News blog &mdash; newest first.</p>
+<ul id="headline-list" class="headline-list"></ul>
+</section>
+<section id="view-topics" class="app-view" hidden aria-labelledby="topics-heading">
+<h2 id="topics-heading" style="font-size:30px;margin:18px 0 0">Topics</h2>
+<p class="lede">Pick a lane. Tap a topic to jump to its stories on the For You feed.</p>
+<div class="topic-chips">
+<button type="button" data-topic="hip-hop-news">Hip Hop News</button>
+<button type="button" data-topic="hip-hop-history">Today in Hip Hop History</button>
+<button type="button" data-topic="research.html">OTG Research Report</button>
+<button type="button" data-topic="philly">Philly</button>
+<button type="button" data-topic="court-legal">Court &amp; Legal</button>
+<button type="button" data-topic="music">Music</button>
+<button type="button" data-topic="sports">Sports</button>
+<button type="button" data-topic="tech">Tech</button>
+</div>
+</section>
+<section id="view-saved" class="app-view" hidden aria-labelledby="saved-heading">
+<h2 id="saved-heading" style="font-size:30px;margin:18px 0 0">Saved</h2>
+<p class="lede">Stories you saved. Saved stories live in this browser only.</p>
+<ul id="saved-list" class="headline-list"></ul>
+</section>
+<div id="article-view" class="article-view" hidden>
+<div class="article-panel" role="dialog" aria-modal="true" aria-labelledby="article-title">
+<button id="article-close" class="article-close" type="button">Close</button>
+<div id="article-content"></div>
+</div>
+</div>
 </main>
+<nav class="app-tabs" aria-label="App">
+<ul>
+<li><button type="button" data-view="for-you" aria-current="page">For You</button></li>
+<li><button type="button" data-view="headlines">Headlines</button></li>
+<li><button type="button" data-view="topics">Topics</button></li>
+<li><button type="button" data-view="saved">Saved</button></li>
+</ul>
+</nav>
 <footer class="site-footer">
 <div class="wrap">
 <p>Over Time Grind &bull; @SupplyTheWork &bull; @ParisEighty</p>
