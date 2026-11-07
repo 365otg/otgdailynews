@@ -14,7 +14,7 @@ function postLink(entry) {
   var alt = links.find(function (l) { return l.rel === 'alternate'; });
   return alt ? alt.href : '#';
 }
-function postDate(entry) {
+function postId(entry) { var m = ((entry.id && entry.id.$t) || '').match(/post-(\d+)/); return m ? m[1] : postLink(entry); } function postDate(entry) {
   var raw = (entry.published && entry.published.$t) || '';
   return new Date(raw);
 }
@@ -304,10 +304,10 @@ function openArticle(entry) {
     '<h2 id="article-title">' + escapeHtml(entry.title.$t) + '</h2>' +
     sourceLine(entry) +
     '<p style="font-size:18px">' + escapeHtml(postSummary(entry, 400)) + '</p>' +
-    '<p class="note">This is a preview. The full story — and the comments — live on the OTG Daily News blog.</p>' +
+    '<p class="note">This is a preview. The full story lives on the OTG Daily News blog — the discussion is right here, below.</p>' +
     '<p><a class="read-full" href="' + escapeHtml(postLink(entry)) + '" target="_blank" rel="noopener">Read the full story on the blog &rarr;</a></p>' +
     saveButtonHtml(entry);
-  view.hidden = false;
+  view.hidden = false; if (window.OTGComments) window.OTGComments.open(postId(entry), postLink(entry));
   document.body.style.overflow = 'hidden';
 }
 function closeArticle() {
@@ -395,11 +395,11 @@ function loadAggregation() {
     var jobs = (cfg.outlets || []).map(function (o) {
       var url = cfg.proxy + encodeURIComponent(o.rss) + '&count=' + per;
       return fetch(url).then(function (r) { return r.json(); }).then(function (d) {
-        if (!d || d.status !== 'ok' || !d.items) return [];
+        if (!d || d.status !== 'ok' || !d.items || !d.items.length) throw new Error('proxy');
         return d.items.slice(0, per).map(function (it) {
           return { outlet: o.name, title: it.title, link: it.link, date: new Date(it.pubDate) };
         });
-      }).catch(function () { return []; });
+      }).catch(function () { return fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(o.rss)).then(function (r) { return r.text(); }).then(function (t) { return parseRssXml(t, o.name, per); }).catch(function () { return []; }); });
     });
     return Promise.all(jobs).then(function (groups) {
       var items = [];
