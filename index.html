@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>OTG Daily News — Over Time Grind</title>
-<meta name="description" content="OTG Daily News: top stories, the OTG Research Report, OTG Music, Morning Brief and Nightly News from Over Time Grind.">
+<title>OTG Daily News — Over Time Grind — EST. 2010</title>
+<meta name="description" content="OTG Daily News: top stories, hip hop news, court & legal, Philly, sports, tech, weird news, OTG Music, Morning Brief and Nightly News from Over Time Grind.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;700;800&display=swap" rel="stylesheet">
@@ -12,77 +12,112 @@
 <script src="app.js" defer></script>
 </head>
 <body>
-<header class="masthead">
-<div class="wrap">
-<p class="date-line"><strong style="color:var(--gold)">EST. 2010</strong> &bull; <span id="today"></span></p>
-<h1><span class="otg">OTG</span> <span class="daily">Daily</span> <span class="news">News</span></h1>
-<hr class="gold-rule">
-<p class="watermark">Over Time Grind &bull; @SupplyTheWork &bull; @ParisEighty</p>
+<header class="topbar">
+<div class="topbar-inner">
+<a class="wordmark" href="index.html">OTG Daily News <span class="est">EST. 2010</span></a>
+<div class="search-box">
+<form id="site-search" role="search" action="#">
+<input id="search-input" type="search" placeholder="Search OTG Daily News" aria-label="Search OTG Daily News" autocomplete="off">
+<button type="submit">Search</button>
+</form>
+</div>
+<div class="top-links">
+<a class="subscribe" href="https://www.supplythework.xyz/">Subscribe</a>
+<span>@SupplyTheWork</span>
+<span>@ParisEighty</span>
+<a href="gear.html">Gear</a>
+<a href="get-covered.html">Get Covered</a>
+</div>
 </div>
 </header>
-<nav class="main-nav" aria-label="Sections">
-<div class="wrap"><ul>
-<li><a href="index.html" aria-current="page">Top Stories</a></li>
-<li><a href="research.html">Research Report</a></li>
+<nav class="tab-nav" aria-label="Sections">
+<ul>
+<li><a href="index.html" aria-current="page">Home</a></li>
+<li><a href="#top-stories">Top Stories</a></li>
+<li><a href="#hip-hop-history">Today in Hip Hop History</a></li>
+<li><a href="research.html">OTG Research Report</a></li>
+<li><a href="#hip-hop-news">Hip Hop News</a></li>
+<li><a href="#court-legal">Court &amp; Legal</a></li>
+<li><a href="#philly">Philly</a></li>
+<li><a href="#sports">Sports</a></li>
+<li><a href="#tech">Tech</a></li>
+<li><a href="#weird-news">Weird News</a></li>
 <li><a href="music.html">OTG Music</a></li>
-<li><a href="brief.html">Morning Brief / Nightly News</a></li>
-<li><a href="gear.html">Gear</a></li>
-<li><a href="get-covered.html">Get Covered</a></li>
-</ul></div>
+<li><a href="brief.html">Morning Brief</a></li>
+<li><a href="brief.html#nightly-heading">Nightly News</a></li>
+</ul>
 </nav>
-<main>
-<section class="section" aria-labelledby="top-heading">
-<div class="wrap">
-<p class="hook"><span>Over Time.</span><br><span>On The Grind.</span><br><span>In The News.</span></p>
-<h2 id="top-heading">Top Stories</h2>
-<p class="lede">The latest from the OTG Daily News blog &mdash; each story links to its blog post, where comments live.</p>
+<main class="wrap">
+<p class="date-line" style="margin-top:16px"><strong style="color:var(--crimson)">OTG Daily News</strong> &bull; <span id="today"></span></p>
+<div class="search-results" id="search-results" hidden></div>
+<section aria-labelledby="top-heading" id="top-stories">
+<h2 id="top-heading" style="font-size:30px;margin:18px 0 0">Top stories</h2>
 <p id="feed-status" class="note">Loading the latest stories&hellip;</p>
-<div class="cards" id="top-stories"></div>
-<h2 style="margin-top:44px">Latest</h2>
-<ul class="latest-list" id="latest-list"></ul>
+<div class="top-stories">
+<article id="lead-story" class="lead-story" aria-label="Lead story"></article>
+<div id="rail-stories" class="rail" aria-label="More top stories"></div>
 </div>
 </section>
-<section class="section lane-research" aria-labelledby="research-heading">
-<div class="wrap">
-<span class="bug">OTG Research Report</span>
-<h2 id="research-heading" style="margin-top:14px">The OTG Research Report</h2>
-<p class="lede">A clean-slate, longitudinal look at U.S. mass shootings going back to 1966 &mdash; what happens before, during and after, and what is missing from the coverage. Sources are posted so you can check them.</p>
-<p><a href="research.html">Read about the Research Report &rarr;</a></p>
-</div>
+<section class="briefing" aria-labelledby="brief-heading">
+<h2 id="brief-heading">Your briefing</h2>
+<p class="brief-date" id="brief-date"></p>
+<p style="margin:0 0 6px"><strong>Morning Brief &mdash; the top 5 lines for today:</strong></p>
+<ol id="brief-list"></ol>
+<p style="margin:12px 0 0"><a href="brief.html" style="font-weight:800;color:var(--crimson)">Morning Brief &amp; Nightly News &rarr;</a></p>
 </section>
-<section class="section lane-music" aria-labelledby="music-heading">
-<div class="wrap">
-<p class="kicker">OTG Music</p>
+<section class="news-section" id="hip-hop-history" aria-labelledby="hhh-heading">
+<h2 id="hhh-heading">Today in Hip Hop History</h2>
+<div class="card-grid" id="section-hip-hop-history"></div>
+</section>
+<section class="news-section" id="hip-hop-news" aria-labelledby="hhn-heading">
+<h2 id="hhn-heading">Hip Hop News</h2>
+<div class="card-grid" id="section-hip-hop-news"></div>
+</section>
+<section class="news-section" id="court-legal" aria-labelledby="court-heading">
+<h2 id="court-heading">Court &amp; Legal</h2>
+<div class="card-grid" id="section-court-legal"></div>
+</section>
+<section class="news-section" id="philly" aria-labelledby="philly-heading">
+<h2 id="philly-heading">Philly</h2>
+<div class="card-grid" id="section-philly"></div>
+</section>
+<section class="news-section" id="sports" aria-labelledby="sports-heading">
+<h2 id="sports-heading">Sports</h2>
+<div class="card-grid" id="section-sports"></div>
+</section>
+<section class="news-section" id="tech" aria-labelledby="tech-heading">
+<h2 id="tech-heading">Tech</h2>
+<div class="card-grid" id="section-tech"></div>
+</section>
+<section class="news-section" id="weird-news" aria-labelledby="weird-heading">
+<h2 id="weird-heading">Weird News</h2>
+<div class="card-grid" id="section-weird-news"></div>
+</section>
+<section class="news-section" id="music" aria-labelledby="music-heading">
 <h2 id="music-heading">OTG Music</h2>
-<p class="lede">The soundtrack of the grind &mdash; new music, new artists, and a new slot every week.</p>
-<p><a href="music.html">Open OTG Music &rarr;</a></p>
-</div>
+<div class="card-grid" id="section-music"></div>
+<p style="margin-top:16px"><a class="section-more" href="music.html">Open OTG Music &rarr;</a></p>
 </section>
-<section class="section lane-morning" aria-labelledby="brief-heading">
-<div class="wrap">
-<p class="kicker">Morning Brief</p>
-<h2 id="brief-heading">Morning Brief</h2>
+<section class="news-section" id="research-report" aria-labelledby="research-heading">
+<h2 id="research-heading">The OTG Research Report</h2>
+<p class="lede">A clean-slate, longitudinal look at U.S. mass shootings going back to 1966 &mdash; what happens before, during and after, and what is missing from the coverage. Sources are posted so you can check them.</p>
+<p><a class="section-more" href="research.html">Read about the Research Report &rarr;</a></p>
+</section>
+<section class="news-section" id="morning-brief" aria-labelledby="mb-heading">
+<h2 id="mb-heading">Morning Brief</h2>
 <p class="lede">The city at dawn &mdash; the top-5 news highlights you need to start your day, published bright and early.</p>
-<p><a href="brief.html">Morning Brief &amp; Nightly News &rarr;</a></p>
-</div>
+<p><a class="section-more" href="brief.html">Morning Brief &rarr;</a></p>
 </section>
-<section class="section lane-nightly" aria-labelledby="nightly-heading">
-<div class="wrap">
-<p class="kicker">Nightly News</p>
-<h2 id="nightly-heading">Nightly News</h2>
+<section class="news-section" id="nightly-news" aria-labelledby="nn-heading">
+<h2 id="nn-heading">Nightly News</h2>
 <p class="lede">The day when it is done &mdash; the evening round-up and the look ahead to tomorrow.</p>
-<p><a href="brief.html">Morning Brief &amp; Nightly News &rarr;</a></p>
-</div>
+<p><a class="section-more" href="brief.html#nightly-heading">Nightly News &rarr;</a></p>
 </section>
-<section class="section lane-gear" aria-labelledby="gear-heading">
-<div class="wrap">
-<p class="kicker">Gear</p>
-<h2 id="gear-heading">The Gear We Use</h2>
-<p class="lede">The gear Charles actually uses &mdash; the machines, the voice island, and the chain they run through.</p>
+<section class="news-section" aria-labelledby="more-heading">
+<h2 id="more-heading">More From OTG</h2>
 <div class="two-col">
 <div class="panel"><h3>Gear</h3><p>The O.T.G Studio chain, the machines and the voice island &mdash; every item actually owned and used on camera.</p><p><a href="gear.html">See the gear &rarr;</a></p></div>
 <div class="panel"><h3>Get Covered</h3><p>Paid coverage for artists, brands and companies: release posts, launch weeks and company profiles, clearly labelled as sponsored.</p><p><a href="get-covered.html">See the rate card &rarr;</a></p></div>
-</div>
 </div>
 </section>
 </main>
@@ -90,7 +125,8 @@
 <div class="wrap">
 <p>Over Time Grind &bull; @SupplyTheWork &bull; @ParisEighty</p>
 <p>OTG Daily News &mdash; covering the culture since 2010. An Over Time Grind / Supply The Work publication.</p>
-<p>Stories are published on the OTG Daily News blog &mdash; comments live there.</p>
+<p>EST. 2010 &bull; Stories are published on the OTG Daily News blog &mdash; comments live there.</p>
+<p><a href="gear.html">Gear</a> &bull; <a href="get-covered.html">Get Covered</a> &bull; <a href="research.html">Research Report</a></p>
 </div>
 </footer>
 </body>
