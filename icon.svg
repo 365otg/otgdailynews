@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="OTG Daily News">
+  <rect width="512" height="512" fill="#0A0A0A"/>
+  <rect x="0" y="0" width="512" height="16" fill="#C8102E"/>
+  <rect x="0" y="496" width="512" height="16" fill="#C8102E"/>
+  <text x="256" y="225" text-anchor="middle" font-family="Arial Narrow, Arial, sans-serif" font-size="150" font-weight="900" fill="#FFFFFF" letter-spacing="2">OTG</text>
+  <rect x="106" y="262" width="300" height="8" fill="#C9A227"/>
+  <text x="256" y="345" text-anchor="middle" font-family="Arial Narrow, Arial, sans-serif" font-size="58" font-weight="900" fill="#C8102E" letter-spacing="6">DAILY NEWS</text>
+  <text x="256" y="405" text-anchor="middle" font-family="Arial, sans-serif" font-size="30" font-weight="700" fill="#D6C08A" letter-spacing="8">EST. 2010</text>
+</svg>
