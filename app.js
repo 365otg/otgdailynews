@@ -267,6 +267,9 @@ async function loadStories() {
 
 // ---- App views: For You / Headlines / Topics / Saved (bottom tab bar) ----
 function switchView(name) {
+  // On a section page there are no app views; the tab bar takes the reader
+  // back to the app front page.
+  if (!document.getElementById('view-for-you')) { window.location.href = 'index.html'; return; }
   var views = ['for-you', 'headlines', 'topics', 'saved'];
   views.forEach(function (v) {
     var el = document.getElementById('view-' + v);
