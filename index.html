@@ -16,7 +16,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo:wght@400;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="styles.css?v=6">
-<script src="app.js?v=7" defer></script><script type="module" src="comments.js?v=1"></script>
+<link rel="stylesheet" href="ticker.css?v=1">
+<script src="app.js?v=7" defer></script><script src="ticker.js?v=1" defer></script><script type="module" src="comments.js?v=1"></script>
 </head>
 <body>
 <header class="topbar">
@@ -37,6 +38,12 @@
 </div>
 </div>
 </header>
+<div class="otg-ticker" id="otgTicker" aria-label="Live sports scores ticker">
+  <div class="otg-ticker__label">O.T.G DAILY NEWS &bull; SPORTS <span class="otg-ticker__mode" id="otgMode">LIVE</span></div>
+  <div class="otg-ticker__viewport">
+    <div class="otg-ticker__track" id="otgTrack"></div>
+  </div>
+</div>
 <nav class="tab-nav" aria-label="Sections">
 <ul>
 <li><a href="index.html" aria-current="page">Home</a></li>

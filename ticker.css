@@ -1,0 +1,61 @@
+/* O.T.G Daily News — live sports ticker (ESPN feed). House colors per COLOR-SYSTEM.md */
+:root{
+  --otg-black:#0A0A0A;
+  --otg-crimson:#C8102E;
+  --otg-cream:#F5EFE0;
+}
+.otg-ticker{
+  display:flex;align-items:stretch;
+  background:var(--otg-black);
+  border-top:3px solid var(--otg-crimson);
+  border-bottom:3px solid var(--otg-crimson);
+  height:52px;
+  overflow:hidden;
+  user-select:none;
+  font-family:"Helvetica Neue",Arial,sans-serif;
+}
+.otg-ticker__label{
+  flex:0 0 auto;
+  display:flex;align-items:center;gap:10px;
+  background:var(--otg-crimson);
+  color:var(--otg-cream);
+  font-weight:800;letter-spacing:.08em;
+  font-size:15px;
+  padding:0 18px;
+  white-space:nowrap;
+  position:relative;z-index:2;
+}
+.otg-ticker__mode{
+  font-size:10px;font-weight:700;letter-spacing:.12em;
+  border:1px solid var(--otg-cream);
+  padding:2px 6px;border-radius:2px;
+  opacity:.9;
+}
+.otg-ticker__viewport{
+  flex:1 1 auto;
+  overflow:hidden;
+  display:flex;align-items:center;
+  position:relative;
+}
+.otg-ticker__track{
+  display:inline-flex;align-items:center;
+  white-space:nowrap;
+  will-change:transform;
+  animation:otg-scroll linear infinite;
+}
+.otg-ticker:hover .otg-ticker__track{animation-play-state:paused;}
+@keyframes otg-scroll{
+  from{transform:translateX(0);}
+  to{transform:translateX(-50%);}
+}
+.otg-ticker__item{
+  font-size:16px;font-weight:600;letter-spacing:.03em;
+  color:var(--otg-cream);
+}
+.otg-ticker__item .lg{color:var(--otg-crimson);font-weight:800;}
+.otg-ticker__item .st{opacity:.75;font-weight:700;font-size:13px;letter-spacing:.08em;}
+.otg-ticker__sep{
+  color:var(--otg-crimson);
+  font-size:18px;
+  margin:0 16px;
+}
