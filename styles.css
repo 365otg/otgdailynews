@@ -161,6 +161,15 @@ nav.main-nav a:hover,nav.main-nav a[aria-current="page"]{color:var(--crimson);bo
 .rate-table th,.rate-table td{border:1px solid var(--black);padding:12px;text-align:left;vertical-align:top}
 .rate-table th{background:var(--black);color:var(--white);font-family:Anton,'Arial Narrow',sans-serif;font-weight:400;letter-spacing:.05em;text-transform:uppercase}
 .rate-table .price{font-family:Anton,'Arial Narrow',sans-serif;font-size:20px;color:var(--crimson);white-space:nowrap}
+/* THE O.T.G NETWORK bar: black strip, header (top of body) + footer, every page */
+.network-bar{background:var(--black);border-bottom:2px solid var(--gold)}
+.network-bar-inner{max-width:1240px;margin:0 auto;padding:8px 20px;display:flex;align-items:center;flex-wrap:wrap}
+.network-bar-label{font-family:Anton,'Arial Narrow',sans-serif;font-weight:400;color:var(--gold);letter-spacing:.14em;font-size:14px;text-transform:uppercase;margin-right:6px;white-space:nowrap}
+.network-bar a{color:var(--cream);font-size:13px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.network-bar a:hover{color:var(--gold)}
+.network-bar a::before{content:"\2022";color:var(--crimson);margin:0 10px}
+.site-footer .network-bar{border-bottom:0;border-top:2px solid var(--gold);margin-bottom:22px;text-align:left}
+.site-footer .network-bar-inner{justify-content:center}
 footer.site-footer{background:var(--black);border-top:4px solid var(--gold);padding:28px 0 40px;text-align:center;color:var(--tan);letter-spacing:.08em;text-transform:uppercase;font-size:14px}
 footer.site-footer a{color:var(--tan)}
 footer.site-footer a:hover{color:var(--gold)}

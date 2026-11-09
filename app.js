@@ -9,6 +9,16 @@ var ALL_ENTRIES = [];
 function escapeHtml(s) {
   return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 }
+// The rss2json proxy returns feed text with HTML entities still encoded as
+// literal characters ("&amp;" instead of "&"). Decode once at ingest, or the
+// renderer's escaping escapes them a second time ("&amp;amp;"), which the
+// browser displays as a literal "&amp;" in the headline. (The XML fallback
+// path needs no decode: DOMParser textContent is already decoded.)
+function decodeEntities(s) {
+  var ta = document.createElement('textarea');
+  ta.innerHTML = String(s);
+  return ta.value;
+}
 function postLink(entry) {
   var links = entry.link || [];
   var alt = links.find(function (l) { return l.rel === 'alternate'; });
@@ -397,7 +407,7 @@ function loadAggregation() {
       return fetch(url).then(function (r) { return r.json(); }).then(function (d) {
         if (!d || d.status !== 'ok' || !d.items || !d.items.length) throw new Error('proxy');
         return d.items.slice(0, per).map(function (it) {
-          return { outlet: o.name, title: it.title, link: it.link, date: new Date(it.pubDate) };
+          return { outlet: o.name, title: decodeEntities(it.title), link: decodeEntities(it.link), date: new Date(it.pubDate) };
         });
       }).catch(function () { return fetch('https://api.allorigins.win/raw?url=' + encodeURIComponent(o.rss)).then(function (r) { return r.text(); }).then(function (t) { return parseRssXml(t, o.name, per); }).catch(function () { return []; }); });
     });
